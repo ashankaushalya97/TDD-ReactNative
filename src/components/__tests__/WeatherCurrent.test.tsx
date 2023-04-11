@@ -1,14 +1,37 @@
-import React from 'react'
-import { render } from "@testing-library/react-native";
-import WeatherCurrent from "../WeatherCurrent";
+import React from 'react';
+import {fireEvent, render, waitFor} from '@testing-library/react-native';
+import WeatherCurrent from '../WeatherCurrent';
+import {useNavigation} from '@react-navigation/native';
 
-describe('WeatherCurrent',() => {
-    test('Should render correctly', ()=> {
-        const wrapper = render(<WeatherCurrent/>)
-        wrapper.getByTestId('weather-current')
-    })
+jest.mock('@react-navigation/native', () => {
+  return {
+    ...jest.requireActual<object>('@react-navigation/native'),
+    useNavigation: jest.fn(),
+  };
+});
 
-    test('Should navigate to weather screen with location',() => {
-        throw new Error('Test not implemented');
-    })
-})
+describe('WeatherCurrent', () => {
+  test('Should render correctly', () => {
+    const wrapper = render(<WeatherCurrent />);
+    wrapper.getByTestId('weather-current');
+  });
+
+  test('Should navigate to weather screen with location', async () => {
+    // throw new Error('Test not implemented');
+    const mockNavigate = jest.fn();
+    (useNavigation as jest.Mock).mockReturnValueOnce({
+      navigate: mockNavigate,
+    });
+
+    const wrapper = render(<WeatherCurrent />);
+    const button = wrapper.getByTestId('weather-current');
+    fireEvent.press(button);
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('Weather', {
+        latitude: 0,
+        longitude: 0,
+      });
+    });
+  });
+});

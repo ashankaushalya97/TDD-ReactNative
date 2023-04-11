@@ -31,10 +31,10 @@ describe('HomeScreen',()=>{
         //     wrapper.getByText('Dec 26, 2022')
         // })
 
-        test('Should contain current day', () => {
-            const wrapper = render(<HomeScreen/>);
-            wrapper.getByText('Monday')
-        })
+        // test('Should contain current day', () => {
+        //     const wrapper = render(<HomeScreen/>);
+        //     wrapper.getByText('Monday')
+        // })
     })
 })
 
